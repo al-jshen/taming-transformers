@@ -6,8 +6,8 @@ from collections import defaultdict
 
 from tqdm import tqdm
 
-from taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
-from taming.data.helper_types import Annotation, ImageDescription, Category
+from dfs.third_party.taming_transformers.taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
+from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, ImageDescription, Category
 
 COCO_PATH_STRUCTURE = {
     'train': {

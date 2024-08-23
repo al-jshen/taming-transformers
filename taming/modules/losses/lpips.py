@@ -5,7 +5,7 @@ import torch.nn as nn
 from torchvision import models
 from collections import namedtuple
 
-from taming.util import get_ckpt_path
+from dfs.third_party.taming_transformers.taming.util import get_ckpt_path
 
 
 class LPIPS(nn.Module):

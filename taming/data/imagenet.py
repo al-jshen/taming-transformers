@@ -7,9 +7,9 @@ import albumentations
 from omegaconf import OmegaConf
 from torch.utils.data import Dataset
 
-from taming.data.base import ImagePaths
-from taming.util import download, retrieve
-import taming.data.utils as bdu
+from dfs.third_party.taming_transformers.taming.data.base import ImagePaths
+from dfs.third_party.taming_transformers.taming.util import download, retrieve
+import dfs.third_party.taming_transformers.taming.data.utils as bdu
 
 
 def give_synsets_from_indices(indices, path_to_yaml="data/imagenet_idx_to_synset.yaml"):
