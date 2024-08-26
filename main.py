@@ -1,17 +1,23 @@
-import argparse, os, sys, datetime, glob, importlib
-from omegaconf import OmegaConf
+import argparse
+import datetime
+import glob
+import importlib
+import os
+import sys
+
+import lightning as pl
 import numpy as np
-from PIL import Image
 import torch
 import torchvision
-from torch.utils.data import random_split, DataLoader, Dataset
-import pytorch_lightning as pl
-from pytorch_lightning import seed_everything
-from pytorch_lightning.trainer import Trainer
-from pytorch_lightning.callbacks import ModelCheckpoint, Callback, LearningRateMonitor
-from pytorch_lightning.utilities import rank_zero_only
+from lightning.pytorch import seed_everything
+from lightning.pytorch.callbacks import Callback, LearningRateMonitor, ModelCheckpoint
+from lightning.pytorch.trainer import Trainer
+from lightning.pytorch.utilities import rank_zero_only
+from omegaconf import OmegaConf
+from PIL import Image
+from torch.utils.data import DataLoader, Dataset
 
-from taming.data.utils import custom_collate
+from dfs.third_party.taming_transformers.taming.data.utils import custom_collate
 
 
 def get_obj_from_str(string, reload=False):
@@ -489,7 +495,7 @@ if __name__ == "__main__":
         # add callback which sets up log directory
         default_callbacks_cfg = {
             "setup_callback": {
-                "target": "main.SetupCallback",
+                "target": "dfs.third_party.taming_transformers.main.SetupCallback",
                 "params": {
                     "resume": opt.resume,
                     "now": now,
@@ -501,7 +507,7 @@ if __name__ == "__main__":
                 }
             },
             "image_logger": {
-                "target": "main.ImageLogger",
+                "target": "dfs.third_party.taming_transformers.main.ImageLogger",
                 "params": {
                     "batch_frequency": 750,
                     "max_images": 4,
@@ -509,7 +515,7 @@ if __name__ == "__main__":
                 }
             },
             "learning_rate_logger": {
-                "target": "main.LearningRateMonitor",
+                "target": "dfs.third_party.taming_transformers.main.LearningRateMonitor",
                 "params": {
                     "logging_interval": "step",
                     #"log_momentum": True
