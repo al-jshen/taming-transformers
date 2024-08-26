@@ -3,21 +3,20 @@ import os
 import sys
 from itertools import product
 from pathlib import Path
-from typing import Literal, List, Optional, Tuple
+from typing import List, Literal, Optional, Tuple
 
 import numpy as np
 import torch
 from omegaconf import OmegaConf
 from pytorch_lightning import seed_everything
+from scripts.make_samples import get_parser, load_model_and_dset
+from taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
+from taming.data.conditional_builder.objects_center_points import ObjectsCenterPointsConditionalBuilder
+from taming.data.helper_types import Annotation, BoundingBox
+from taming.models.cond_transformer import Net2NetTransformer
 from torch import Tensor
 from torchvision.utils import save_image
 from tqdm import tqdm
-
-from scripts.make_samples import get_parser, load_model_and_dset
-from taming.data.conditional_builder.objects_center_points import ObjectsCenterPointsConditionalBuilder
-from taming.data.helper_types import BoundingBox, Annotation
-from taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
-from taming.models.cond_transformer import Net2NetTransformer
 
 seed_everything(42424242)
 device: Literal['cuda', 'cpu'] = 'cuda'
@@ -115,14 +114,14 @@ def add_arg_to_parser(parser):
         "--conditional",
         type=str,
         default='objects_bbox',
-        help=f"objects_bbox or objects_center_points",
+        help="objects_bbox or objects_center_points",
     )
     parser.add_argument(
         "-N",
         "--n_samples_per_layout",
         type=int,
         default=4,
-        help=f"how many samples to generate per layout",
+        help="how many samples to generate per layout",
     )
     return parser
 

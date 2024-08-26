@@ -1,9 +1,10 @@
 import os
-import numpy as np
+
 import albumentations
+import numpy as np
 from torch.utils.data import Dataset
 
-from dfs.third_party.taming_transformers.taming.data.base import ImagePaths, NumpyPaths, ConcatDatasetWithIndex
+from dfs.third_party.taming_transformers.taming.data.base import ConcatDatasetWithIndex, ImagePaths, NumpyPaths
 
 
 class FacesBase(Dataset):

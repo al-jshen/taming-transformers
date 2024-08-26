@@ -1,8 +1,9 @@
 import os
-import torch
+
 import numpy as np
-from tqdm import trange
+import torch
 from PIL import Image
+from tqdm import trange
 
 
 def get_state(gpu):

@@ -1,11 +1,12 @@
 import os
-import numpy as np
-import cv2
+
 import albumentations
+import cv2
+import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 
-from dfs.third_party.taming_transformers.taming.data.sflckr import SegmentationBase # for examples included in repo
+from dfs.third_party.taming_transformers.taming.data.sflckr import SegmentationBase  # for examples included in repo
 
 
 class Examples(SegmentationBase):
@@ -78,7 +79,7 @@ class ADE20kBase(Dataset):
     def __getitem__(self, i):
         example = dict((k, self.labels[k][i]) for k in self.labels)
         image = Image.open(example["file_path_"])
-        if not image.mode == "RGB":
+        if image.mode != "RGB":
             image = image.convert("RGB")
         image = np.array(image).astype(np.uint8)
         if self.size is not None:

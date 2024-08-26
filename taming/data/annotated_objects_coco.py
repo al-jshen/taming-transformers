@@ -1,13 +1,13 @@
 import json
+from collections import defaultdict
 from itertools import chain
 from pathlib import Path
-from typing import Iterable, Dict, List, Callable, Any
-from collections import defaultdict
+from typing import Any, Callable, Dict, Iterable, List
 
 from tqdm import tqdm
 
 from dfs.third_party.taming_transformers.taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
-from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, ImageDescription, Category
+from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, Category, ImageDescription
 
 COCO_PATH_STRUCTURE = {
     'train': {

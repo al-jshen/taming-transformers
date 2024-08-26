@@ -1,18 +1,33 @@
-from pathlib import Path
-from typing import Optional, List, Callable, Dict, Any, Union
 import warnings
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import PIL.Image as pil_image
 from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_bbox import ObjectsBoundingBoxConditionalBuilder
-from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_center_points import ObjectsCenterPointsConditionalBuilder
+from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_bbox import (
+    ObjectsBoundingBoxConditionalBuilder,
+)
+from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_center_points import (
+    ObjectsCenterPointsConditionalBuilder,
+)
 from dfs.third_party.taming_transformers.taming.data.conditional_builder.utils import load_object_from_string
-from dfs.third_party.taming_transformers.taming.data.helper_types import BoundingBox, CropMethodType, Image, Annotation, SplitType
-from dfs.third_party.taming_transformers.taming.data.image_transforms import CenterCropReturnCoordinates, RandomCrop1dReturnCoordinates, \
-    Random2dCropReturnCoordinates, RandomHorizontalFlipReturn, convert_pil_to_tensor
+from dfs.third_party.taming_transformers.taming.data.helper_types import (
+    Annotation,
+    BoundingBox,
+    CropMethodType,
+    Image,
+    SplitType,
+)
+from dfs.third_party.taming_transformers.taming.data.image_transforms import (
+    CenterCropReturnCoordinates,
+    Random2dCropReturnCoordinates,
+    RandomCrop1dReturnCoordinates,
+    RandomHorizontalFlipReturn,
+    convert_pil_to_tensor,
+)
 
 
 class AnnotatedObjectsDataset(Dataset):

@@ -1,21 +1,21 @@
-import sys, os
+import os
+import sys
+
 import numpy as np
-import scipy
 import torch
-import torch.nn as nn
-from scipy import ndimage
-from tqdm import tqdm, trange
-from PIL import Image
 import torch.hub
+import torch.nn as nn
 import torchvision
-import torch.nn.functional as F
+from PIL import Image
+from tqdm import tqdm
 
 # download deeplabv2_resnet101_msc-cocostuff164k-100000.pth from
 # https://github.com/kazuto1011/deeplab-pytorch/releases/download/v1.0/deeplabv2_resnet101_msc-cocostuff164k-100000.pth
 # and put the path here
 CKPT_PATH = "TODO"
 
-rescale = lambda x: (x + 1.) / 2.
+def rescale(x):
+    return (x + 1.0) / 2.0
 
 def rescale_bgr(x):
     x = (x+1)*127.5

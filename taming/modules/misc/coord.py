@@ -1,5 +1,6 @@
 import torch
 
+
 class CoordStage(object):
     def __init__(self, n_embed, down_factor):
         self.n_embed = n_embed
@@ -10,7 +11,7 @@ class CoordStage(object):
 
     def encode(self, c):
         """fake vqmodel interface"""
-        assert 0.0 <= c.min() and c.max() <= 1.0
+        assert c.min() >= 0.0 and c.max() <= 1.0
         b,ch,h,w = c.shape
         assert ch == 1
 

@@ -1,15 +1,19 @@
-import os, tarfile, glob, shutil
-import yaml
-import numpy as np
-from tqdm import tqdm
-from PIL import Image
-import albumentations
-from omegaconf import OmegaConf
-from torch.utils.data import Dataset
+import glob
+import os
+import shutil
+import tarfile
 
+import albumentations
+import numpy as np
+import yaml
+from omegaconf import OmegaConf
+from PIL import Image
+from torch.utils.data import Dataset
+from tqdm import tqdm
+
+import dfs.third_party.taming_transformers.taming.data.utils as bdu
 from dfs.third_party.taming_transformers.taming.data.base import ImagePaths
 from dfs.third_party.taming_transformers.taming.util import download, retrieve
-import dfs.third_party.taming_transformers.taming.data.utils as bdu
 
 
 def give_synsets_from_indices(indices, path_to_yaml="data/imagenet_idx_to_synset.yaml"):
@@ -41,7 +45,7 @@ def str_to_indices(string):
 class ImageNetBase(Dataset):
     def __init__(self, config=None):
         self.config = config or OmegaConf.create()
-        if not type(self.config)==dict:
+        if type(self.config) != dict:
             self.config = OmegaConf.to_container(self.config)
         self._prepare()
         self._prepare_synset_to_human()
@@ -61,7 +65,7 @@ class ImageNetBase(Dataset):
         ignore = set([
             "n06596364_9591.JPEG",
         ])
-        relpaths = [rpath for rpath in relpaths if not rpath.split("/")[-1] in ignore]
+        relpaths = [rpath for rpath in relpaths if rpath.split("/")[-1] not in ignore]
         if "sub_indices" in self.config:
             indices = str_to_indices(self.config["sub_indices"])
             synsets = give_synsets_from_indices(indices, path_to_yaml=self.idx2syn)  # returns a list of strings
@@ -79,7 +83,7 @@ class ImageNetBase(Dataset):
         URL = "https://heibox.uni-heidelberg.de/f/9f28e956cd304264bb82/?dl=1"
         self.human_dict = os.path.join(self.root, "synset_human.txt")
         if (not os.path.exists(self.human_dict) or
-                not os.path.getsize(self.human_dict)==SIZE):
+                os.path.getsize(self.human_dict) != SIZE):
             download(URL, self.human_dict)
 
     def _prepare_idx_to_synset(self):
@@ -146,7 +150,7 @@ class ImageNetTrain(ImageNetBase):
             datadir = self.datadir
             if not os.path.exists(datadir):
                 path = os.path.join(self.root, self.FILES[0])
-                if not os.path.exists(path) or not os.path.getsize(path)==self.SIZES[0]:
+                if not os.path.exists(path) or os.path.getsize(path) != self.SIZES[0]:
                     import academictorrents as at
                     atpath = at.get(self.AT_HASH, datastore=self.root)
                     assert atpath == path
@@ -204,7 +208,7 @@ class ImageNetValidation(ImageNetBase):
             datadir = self.datadir
             if not os.path.exists(datadir):
                 path = os.path.join(self.root, self.FILES[0])
-                if not os.path.exists(path) or not os.path.getsize(path)==self.SIZES[0]:
+                if not os.path.exists(path) or os.path.getsize(path) != self.SIZES[0]:
                     import academictorrents as at
                     atpath = at.get(self.AT_HASH, datastore=self.root)
                     assert atpath == path
@@ -215,7 +219,7 @@ class ImageNetValidation(ImageNetBase):
                     tar.extractall(path=datadir)
 
                 vspath = os.path.join(self.root, self.FILES[1])
-                if not os.path.exists(vspath) or not os.path.getsize(vspath)==self.SIZES[1]:
+                if not os.path.exists(vspath) or os.path.getsize(vspath) != self.SIZES[1]:
                     download(self.VS_URL, vspath)
 
                 with open(vspath, "r") as f:
@@ -266,7 +270,8 @@ def get_preprocessor(size=None, random_crop=False, additional_targets=None,
         preprocessor = albumentations.Compose(transforms,
                                               additional_targets=additional_targets)
     else:
-        preprocessor = lambda **kwargs: kwargs
+        def preprocessor(**kwargs):
+            return kwargs
     return preprocessor
 
 
@@ -389,7 +394,7 @@ class DRINExamples(Dataset):
 
     def preprocess_image(self, image_path):
         image = Image.open(image_path)
-        if not image.mode == "RGB":
+        if image.mode != "RGB":
             image = image.convert("RGB")
         image = np.array(image).astype(np.uint8)
         image = self.preprocessor(image=image)["image"]
@@ -473,10 +478,7 @@ class ImageNetScale(Dataset):
             transforms.append(cropper)
 
         if len(transforms) > 0:
-            if self.up_factor is not None:
-                additional_targets = {"lr": "image"}
-            else:
-                additional_targets = None
+            additional_targets = {"lr": "image"} if self.up_factor is not None else None
             self.preprocessor = albumentations.Compose(transforms,
                                                        additional_targets=additional_targets)
         else:
@@ -519,8 +521,8 @@ class ImageNetScaleValidation(ImageNetScale):
         return ImageNetValidation()
 
 
-from skimage.feature import canny
 from skimage.color import rgb2gray
+from skimage.feature import canny
 
 
 class ImageNetEdges(ImageNetScale):

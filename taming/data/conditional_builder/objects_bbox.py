@@ -1,15 +1,27 @@
 from itertools import cycle
-from typing import List, Tuple, Callable, Optional
+from typing import Callable, List, Optional, Tuple
 
-from PIL import Image as pil_image, ImageDraw as pil_img_draw, ImageFont
 from more_itertools.recipes import grouper
-from dfs.third_party.taming_transformers.taming.data.image_transforms import convert_pil_to_tensor
+from PIL import Image as pil_image
+from PIL import ImageDraw as pil_img_draw
+from PIL import ImageFont
 from torch import LongTensor, Tensor
 
-from dfs.third_party.taming_transformers.taming.data.helper_types import BoundingBox, Annotation
-from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_center_points import ObjectsCenterPointsConditionalBuilder
-from dfs.third_party.taming_transformers.taming.data.conditional_builder.utils import COLOR_PALETTE, WHITE, GRAY_75, BLACK, additional_parameters_string, \
-    pad_list, get_plot_font_size, absolute_bbox
+from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_center_points import (
+    ObjectsCenterPointsConditionalBuilder,
+)
+from dfs.third_party.taming_transformers.taming.data.conditional_builder.utils import (
+    BLACK,
+    COLOR_PALETTE,
+    GRAY_75,
+    WHITE,
+    absolute_bbox,
+    additional_parameters_string,
+    get_plot_font_size,
+    pad_list,
+)
+from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, BoundingBox
+from dfs.third_party.taming_transformers.taming.data.image_transforms import convert_pil_to_tensor
 
 
 class ObjectsBoundingBoxConditionalBuilder(ObjectsCenterPointsConditionalBuilder):

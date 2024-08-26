@@ -1,4 +1,6 @@
-import os, hashlib
+import hashlib
+import os
+
 import requests
 from tqdm import tqdm
 
@@ -19,12 +21,11 @@ def download(url, local_path, chunk_size=1024):
     os.makedirs(os.path.split(local_path)[0], exist_ok=True)
     with requests.get(url, stream=True) as r:
         total_size = int(r.headers.get("content-length", 0))
-        with tqdm(total=total_size, unit="B", unit_scale=True) as pbar:
-            with open(local_path, "wb") as f:
-                for data in r.iter_content(chunk_size=chunk_size):
-                    if data:
-                        f.write(data)
-                        pbar.update(chunk_size)
+        with tqdm(total=total_size, unit="B", unit_scale=True) as pbar, open(local_path, "wb") as f:
+            for data in r.iter_content(chunk_size=chunk_size):
+                if data:
+                    f.write(data)
+                    pbar.update(chunk_size)
 
 
 def md5_hash(path):
@@ -36,7 +37,7 @@ def md5_hash(path):
 def get_ckpt_path(name, root, check=False):
     assert name in URL_MAP
     path = os.path.join(root, CKPT_MAP[name])
-    if not os.path.exists(path) or (check and not md5_hash(path) == MD5_MAP[name]):
+    if not os.path.exists(path) or (check and md5_hash(path) != MD5_MAP[name]):
         print("Downloading {} model from {} to {}".format(name, URL_MAP[name], path))
         download(URL_MAP[name], path)
         md5 = md5_hash(path)
@@ -117,10 +118,7 @@ def retrieve(
             parent = list_or_dict
 
             try:
-                if isinstance(list_or_dict, dict):
-                    list_or_dict = list_or_dict[key]
-                else:
-                    list_or_dict = list_or_dict[int(key)]
+                list_or_dict = list_or_dict[key] if isinstance(list_or_dict, dict) else list_or_dict[int(key)]
             except (KeyError, IndexError, ValueError) as e:
                 raise KeyNotFoundError(e, keys=keys, visited=visited)
 

@@ -1,12 +1,13 @@
-import os
 import json
+import os
+
 import albumentations
 import numpy as np
 from PIL import Image
-from tqdm import tqdm
 from torch.utils.data import Dataset
+from tqdm import tqdm
 
-from dfs.third_party.taming_transformers.taming.data.sflckr import SegmentationBase # for examples included in repo
+from dfs.third_party.taming_transformers.taming.data.sflckr import SegmentationBase  # for examples included in repo
 
 
 class Examples(SegmentationBase):
@@ -33,7 +34,7 @@ class CocoBase(Dataset):
         self.onehot = onehot_segmentation       # return segmentation as rgb or one hot
         self.stuffthing = use_stuffthing        # include thing in segmentation
         if self.onehot and not self.stuffthing:
-            raise NotImplemented("One hot mode is only supported for the "
+            raise NotImplementedError("One hot mode is only supported for the "
                                  "stuffthings version because labels are stored "
                                  "a bit different.")
 
@@ -95,12 +96,12 @@ class CocoBase(Dataset):
 
     def preprocess_image(self, image_path, segmentation_path):
         image = Image.open(image_path)
-        if not image.mode == "RGB":
+        if image.mode != "RGB":
             image = image.convert("RGB")
         image = np.array(image).astype(np.uint8)
 
         segmentation = Image.open(segmentation_path)
-        if not self.onehot and not segmentation.mode == "RGB":
+        if not self.onehot and segmentation.mode != "RGB":
             segmentation = segmentation.convert("RGB")
         segmentation = np.array(segmentation).astype(np.uint8)
         if self.onehot:

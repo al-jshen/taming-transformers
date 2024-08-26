@@ -1,16 +1,21 @@
-import argparse, os, sys, glob, math, time
-import torch
+import argparse
+import glob
+import math
+import os
+import sys
+import time
+
 import numpy as np
-from omegaconf import OmegaConf
 import streamlit as st
-from streamlit import caching
+import torch
+from main import instantiate_from_config
+from omegaconf import OmegaConf
 from PIL import Image
-from main import instantiate_from_config, DataModuleFromConfig
-from torch.utils.data import DataLoader
 from torch.utils.data.dataloader import default_collate
 
 
-rescale = lambda x: (x + 1.) / 2.
+def rescale(x):
+    return (x + 1.0) / 2.0
 
 
 def bchw_to_st(x):
@@ -26,7 +31,7 @@ def get_interactive_image(resize=False):
     image = st.file_uploader("Input", type=["jpg", "JPEG", "png"])
     if image is not None:
         image = Image.open(image)
-        if not image.mode == "RGB":
+        if image.mode != "RGB":
             image = image.convert("RGB")
         image = np.array(image).astype(np.uint8)
         print("upload image shape: {}".format(image.shape))
@@ -102,10 +107,7 @@ def run_conditional(model, dsets):
     idx = z_indices
 
     half_sample = st.sidebar.checkbox("Image Completion", value=False)
-    if half_sample:
-        start = idx.shape[1]//2
-    else:
-        start = 0
+    start = idx.shape[1] // 2 if half_sample else 0
 
     idx[:,start:] = 0
     idx = idx.reshape(cshape[0],cshape[2],cshape[3])
@@ -338,7 +340,7 @@ if __name__ == "__main__":
 
     st.sidebar.text(ckpt)
     gs = st.sidebar.empty()
-    gs.text(f"Global step: ?")
+    gs.text("Global step: ?")
     st.sidebar.text("Options")
     #gpu = st.sidebar.checkbox("GPU", value=True)
     gpu = True

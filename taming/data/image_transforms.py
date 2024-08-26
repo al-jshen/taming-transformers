@@ -4,7 +4,8 @@ from typing import Union
 
 import torch
 from torch import Tensor
-from torchvision.transforms import RandomCrop, functional as F, CenterCrop, RandomHorizontalFlip, PILToTensor
+from torchvision.transforms import CenterCrop, PILToTensor, RandomCrop, RandomHorizontalFlip
+from torchvision.transforms import functional as F
 from torchvision.transforms.functional import _get_image_size as get_image_size
 
 from dfs.third_party.taming_transformers.taming.data.helper_types import BoundingBox, Image
@@ -72,10 +73,7 @@ class Random2dCropReturnCoordinates(torch.nn.Module):
     def forward(self, img: Image) -> (BoundingBox, Image):
         width, height = get_image_size(img)
         max_size = min(width, height)
-        if max_size <= self.min_size:
-            size = max_size
-        else:
-            size = random.randint(self.min_size, max_size)
+        size = max_size if max_size <= self.min_size else random.randint(self.min_size, max_size)
         top = random.randint(0, height - size)
         left = random.randint(0, width - size)
         bbox = left / width, top / height, size / width, size / height

@@ -1,17 +1,21 @@
-import argparse, os, sys, glob
-import torch
+import argparse
+import glob
+import os
+import sys
 import time
+
 import numpy as np
+import torch
+from einops import repeat
+from main import instantiate_from_config
 from omegaconf import OmegaConf
 from PIL import Image
-from tqdm import tqdm, trange
-from einops import repeat
-
-from main import instantiate_from_config
 from taming.modules.transformer.mingpt import sample_with_past
+from tqdm import tqdm
 
 
-rescale = lambda x: (x + 1.) / 2.
+def rescale(x):
+    return (x + 1.0) / 2.0
 
 
 def chw_to_pillow(x):

@@ -1,5 +1,6 @@
-import torch
 import sys
+
+import torch
 
 if __name__ == "__main__":
     inpath = sys.argv[1]

@@ -1,4 +1,5 @@
 import argparse
+import contextlib
 import datetime
 import glob
 import importlib
@@ -10,7 +11,7 @@ import numpy as np
 import torch
 import torchvision
 from lightning.pytorch import seed_everything
-from lightning.pytorch.callbacks import Callback, LearningRateMonitor, ModelCheckpoint
+from lightning.pytorch.callbacks import Callback
 from lightning.pytorch.trainer import Trainer
 from lightning.pytorch.utilities import rank_zero_only
 from omegaconf import OmegaConf
@@ -120,7 +121,7 @@ def nondefault_trainer_args(opt):
 
 
 def instantiate_from_config(config):
-    if not "target" in config:
+    if "target" not in config:
         raise KeyError("Expected key `target` to instantiate.")
     return get_obj_from_str(config["target"])(**config.get("params", dict()))
 
@@ -215,10 +216,8 @@ class SetupCallback(Callback):
                 dst, name = os.path.split(self.logdir)
                 dst = os.path.join(dst, "child_runs", name)
                 os.makedirs(os.path.split(dst)[0], exist_ok=True)
-                try:
+                with contextlib.suppress(FileNotFoundError):
                     os.rename(self.logdir, dst)
-                except FileNotFoundError:
-                    pass
 
 
 class ImageLogger(Callback):
@@ -308,10 +307,8 @@ class ImageLogger(Callback):
 
     def check_frequency(self, batch_idx):
         if (batch_idx % self.batch_freq) == 0 or (batch_idx in self.log_steps):
-            try:
+            with contextlib.suppress(IndexError):
                 self.log_steps.pop(0)
-            except IndexError:
-                pass
             return True
         return False
 
@@ -428,7 +425,7 @@ if __name__ == "__main__":
         trainer_config["distributed_backend"] = "ddp"
         for k in nondefault_trainer_args(opt):
             trainer_config[k] = getattr(opt, k)
-        if not "gpus" in trainer_config:
+        if "gpus" not in trainer_config:
             del trainer_config["distributed_backend"]
             cpu = True
         else:
@@ -538,10 +535,7 @@ if __name__ == "__main__":
 
         # configure learning rate
         bs, base_lr = config.data.params.batch_size, config.model.base_learning_rate
-        if not cpu:
-            ngpu = len(lightning_config.trainer.gpus.strip(",").split(','))
-        else:
-            ngpu = 1
+        ngpu = len(lightning_config.trainer.gpus.strip(",").split(",")) if not cpu else 1
         accumulate_grad_batches = lightning_config.trainer.accumulate_grad_batches or 1
         print(f"accumulate_grad_batches = {accumulate_grad_batches}")
         lightning_config.trainer.accumulate_grad_batches = accumulate_grad_batches

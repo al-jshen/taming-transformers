@@ -1,12 +1,14 @@
-from collections import defaultdict
-from csv import DictReader, reader as TupleReader
-from pathlib import Path
-from typing import Dict, List, Any
 import warnings
+from collections import defaultdict
+from csv import DictReader
+from csv import reader as TupleReader
+from pathlib import Path
+from typing import Any, Dict, List
+
+from tqdm import tqdm
 
 from dfs.third_party.taming_transformers.taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
 from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, Category
-from tqdm import tqdm
 
 OPEN_IMAGES_STRUCTURE = {
     'train': {

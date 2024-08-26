@@ -1,7 +1,7 @@
 import importlib
-from typing import List, Any, Tuple, Optional
+from typing import Any, List, Optional, Tuple
 
-from dfs.third_party.taming_transformers.taming.data.helper_types import BoundingBox, Annotation
+from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, BoundingBox
 
 # source: seaborn, color palette tab10
 COLOR_PALETTE = [(30, 118, 179), (255, 126, 13), (43, 159, 43), (213, 38, 39), (147, 102, 188),
