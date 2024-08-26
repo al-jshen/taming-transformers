@@ -5,7 +5,7 @@ import sys
 
 import numpy as np
 import torch
-from main import instantiate_from_config
+from dfs.third_party.taming_transformers.main import instantiate_from_config
 from omegaconf import OmegaConf
 from PIL import Image
 from torch.utils.data.dataloader import default_collate

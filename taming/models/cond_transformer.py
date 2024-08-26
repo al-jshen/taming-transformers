@@ -1,7 +1,7 @@
 import pytorch_lightning as pl
 import torch
 import torch.nn.functional as F
-from main import instantiate_from_config
+from dfs.third_party.taming_transformers.main import instantiate_from_config
 
 from dfs.third_party.taming_transformers.taming.modules.util import SOSProvider
 
