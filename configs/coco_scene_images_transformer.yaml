@@ -45,7 +45,7 @@ model:
         conditional_key: objects_bbox
 
 data:
-  target: main.DataModuleFromConfig
+  target: dfs.third_party.taming_transformers.main.DataModuleFromConfig
   params:
     batch_size: 6
     train:

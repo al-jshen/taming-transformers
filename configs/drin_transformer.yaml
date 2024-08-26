@@ -63,7 +63,7 @@ model:
           target: dfs.third_party.taming_transformers.taming.modules.losses.DummyLoss
 
 data:
-  target: main.DataModuleFromConfig
+  target: dfs.third_party.taming_transformers.main.DataModuleFromConfig
   params:
     batch_size: 2
     num_workers: 8
