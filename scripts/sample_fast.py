@@ -10,7 +10,7 @@ from einops import repeat
 from dfs.third_party.taming_transformers.main import instantiate_from_config
 from omegaconf import OmegaConf
 from PIL import Image
-from taming.modules.transformer.mingpt import sample_with_past
+from dfs.third_party.taming_transformers.taming.modules.transformer.mingpt import sample_with_past
 from tqdm import tqdm
 
 

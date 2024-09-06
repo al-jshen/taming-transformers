@@ -84,7 +84,7 @@ def save_depth(dataset, path, debug=False):
 
 
 if __name__ == "__main__":
-    from taming.data.imagenet import ImageNetTrain, ImageNetValidation
+    from dfs.third_party.taming_transformers.taming.data.imagenet import ImageNetTrain, ImageNetValidation
     out = "data/imagenet_depth"
     if not os.path.exists(out):
         print("Please create a folder or symlink '{}' to extract depth data ".format(out) +

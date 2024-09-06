@@ -10,10 +10,10 @@ import torch
 from omegaconf import OmegaConf
 from pytorch_lightning import seed_everything
 from scripts.make_samples import get_parser, load_model_and_dset
-from taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
-from taming.data.conditional_builder.objects_center_points import ObjectsCenterPointsConditionalBuilder
-from taming.data.helper_types import Annotation, BoundingBox
-from taming.models.cond_transformer import Net2NetTransformer
+from dfs.third_party.taming_transformers.taming.data.annotated_objects_dataset import AnnotatedObjectsDataset
+from dfs.third_party.taming_transformers.taming.data.conditional_builder.objects_center_points import ObjectsCenterPointsConditionalBuilder
+from dfs.third_party.taming_transformers.taming.data.helper_types import Annotation, BoundingBox
+from dfs.third_party.taming_transformers.taming.models.cond_transformer import Net2NetTransformer
 from torch import Tensor
 from torchvision.utils import save_image
 from tqdm import tqdm
