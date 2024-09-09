@@ -63,7 +63,7 @@ class VQModel(pl.LightningModule):
         return dec
 
     def decode_code(self, code_b):
-        quant_b = self.quantize.embed_code(code_b)
+        quant_b = self.quantize.embedding(code_b)
         dec = self.decode(quant_b)
         return dec
 
